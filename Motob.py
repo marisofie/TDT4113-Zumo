@@ -1,5 +1,6 @@
 import basic_robot.motors as motors
 
+
 class Motob:
 
     def __init__(self):
@@ -15,7 +16,7 @@ class Motob:
     def operationalize(self):
         for recom in self.value:
             if recom[0] == 'F':
-                self.motors.forward(speed=recom[1]*0.01) #multiply with 0.01 to get percent
+                self.motors.forward(speed=recom[1]*0.01) #multiply the degrees with 0.01 to get percent for speed
             elif recom[0] == 'B':
                 motors.backward(speed=recom[1]*0.01)
             elif recom[0] == 'L':
