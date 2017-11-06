@@ -27,9 +27,9 @@ class Behavior():
     
     #Updates the behavior. The main call to the behavior. Returns the motor_reccomantations
     def update(self):
-        if(self.active_flag):
+        if self.active_flag:
             self.consider_deactivation()
-        elif(!self.active_flag):
+        elif self.active_flag == False:
             self.consider_deactivation()
         motor_recommendations = self.sense_and_act()
         self.get_weight()
