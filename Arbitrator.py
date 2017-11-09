@@ -1,25 +1,24 @@
 class Arbitrator:
 
-    def __init__(self, BBCON):
-        self.BBCON = BBCON
-        self.stochastic = False
-        self.halt = False
+    def __init__(self, bbcon):
+        self.bbcon = bbcon
 
+    # Fetches the active behaviours from the BBCON
     def fetch_behaviors(self):
-        return self.BBCON.active_behaviors
+        return self.bbcon.get_active_behaviours()
 
-    # Simple deterministic
-    def choose_action(self):
-        behaviors = self.fetch_behaviors()
-        winner = behaviors[0]
-        max_weight = -1
-        for b in behaviors:
-            if b.halt_request:
-                self.halt = True
-            if b.weight > max_weight:
-                max_weight = b.weight
-                winner = b
-        return winner.motor_recommendations, self.halt
+    # Choses a behaviour based on the behaviour weight (deterministic)
+    # Returns the chosen behaviours motor recommendations (update())
+    # and a boolean indicating whether a run should be halted
+    def choose_action_deterministic(self):
+        active_behaviours = self.fetch_behaviors()
+        max_weight = 0
+        chosen_behaviour = None
 
+        for behaviour in active_behaviours:
+            weight = behaviour.get_weight
+            if weight > max_weight:
+                max_weight = weight
+                chosen_behaviour = behaviour
 
-
+        return chosen_behaviour.get_motor_recommendations(), chosen_behaviour.get_halt_request()

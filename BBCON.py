@@ -10,6 +10,9 @@ class BBCON:
 
         self.current_timestep = 0
 
+    def get_active_behaviours(self):
+        return self.active_behaviors
+
     # Adds a newly-created behavior to he list of behaviours
     def add_behaviour(self, behavior):
         if behavior not in self.behaviors:
@@ -50,7 +53,7 @@ class BBCON:
     # choose a winning behavior
     # return that behavior’s motor recommendations and halt request flag
     def invoke_arbitrator(self):
-        #TODO
+        self.arbitrator.choose_action()
 
     # Update motobs based on invoke_arbitrator()s motor recommendations
     # Motobs need to update settings of all motors
