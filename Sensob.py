@@ -1,5 +1,6 @@
 # Interface between one or more sensors and the behaviours
 
+from basic_robot.camera import *
 
 class Sensob:
 
@@ -25,4 +26,20 @@ class Sensob:
             sensor.reset()
 
 
-#Kanskje vi lager flere subklasser senere når vi vet hva vi vil at roboten skal gjøre. F. eks. med kamera
+# Subclasses
+
+class Cameraob(Sensob):
+    def __init__(self):
+        camob = Camera()
+        super().__init__([camob])
+
+
+    def process_data(self, data):
+        pass
+
+
+
+
+
+
+
