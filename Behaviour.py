@@ -99,9 +99,9 @@ class DriveAround(Behavior):
 
     def sense_and_act(self):
         directions = ['R', 'L', 'F', 'B']
-        direction = random.randint(0, 3)
+        direction = directions[random.randint(0, 3)]
         speed = random.randint(0, 100)
-        self.motor_recommendations[(direction, speed)]
+        self.motor_recommendations = [(direction, speed)]
         self.match_degree = 0.1
 
 
