@@ -16,6 +16,9 @@ class Behavior():
     def get_motor_recommendations(self):
         return self.motor_recommendations
 
+    def get_active_flag(self):
+        return self.active_flag
+
     # Update the weight of the beahvior
     def set_weight(self):
         self.weight = self.priority * self.match_degree
@@ -40,10 +43,11 @@ class Behavior():
     #Updates the behavior. The main call to the behavior. Returns the motor_reccomantations
     def update(self):
         if self.active_flag:
-            # self.consider_deactivation()
+            self.consider_deactivation()
+        else:
+            self.consider_activation()
+
+        if self.active_flag:
             self.sense_and_act()
             self.set_weight()
-        else:
-            # self.consider_activation()
-            pass
 
