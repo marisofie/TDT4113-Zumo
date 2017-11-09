@@ -12,6 +12,9 @@ class Camera():
 
     def get_value(self):  return self.value
 
+    def get_size(self):
+        return self.img_height * self.img_width
+
     def update(self):
         self.sensor_get_value()
         return self.value
