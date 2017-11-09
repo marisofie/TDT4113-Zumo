@@ -1,3 +1,4 @@
+import time
 class BBCON:
 
     def __init__(self):
@@ -35,7 +36,12 @@ class BBCON:
         self.inactive_behaviors.append(behavior)
 
     def run_one_timestep(self):
-        #TODO
+        self.update_all_sensobs()
+        self.update_all_behaviours()
+        self.arbitrator.choose_action_deterministic()
+        self.update_motobs()
+        self.wait()
+        self.reset_sensob()
 
     # Update all sensobs:
     # querying the relevant sensors for their values
@@ -58,18 +64,27 @@ class BBCON:
     # Update motobs based on invoke_arbitrator()s motor recommendations
     # Motobs need to update settings of all motors
     def update_motobs(self):
-        #TODO
+        info = self.invoke_arbitrator()
+        if info[1]:
+            self.halt()
+        else:
+            motor_recom = info[0]
+            k = 0
+            for motob in self.motobs:
+                motob.update_motor(motor_recom[k])
+                k += 1
+
+    def halt(self):
+        for motob in self.motobs:
+            motob.stop()
 
     # Wait: allows the motor settings to remain active for a short period of time, e.g. one half second
     # producing activity in the robot, such as moving forward or turning
     def wait(self):
-        #TODO
+        time.sleep(0.5)
 
     # Resets all sensobs and/or associated sensors by calling the sensobs' own reset method
-    def reset_sensob(self, sensob, reset_all):
-        if reset_all:
-            for sensob in self.sensobs:
-                sensob.reset() # All sensors have a reset()-fuction, so assumed sensobs also have that
-        else:
+    def reset_sensob(self):
+        for sensob in self.sensobs:
             sensob.reset()
 
