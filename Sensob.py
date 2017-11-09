@@ -2,7 +2,8 @@
 
 from basic_robot.camera import *
 from basic_robot.ultrasonic import *
-from basic_robot.irproximity_sensor import *
+from basic_robot.reflectance_sensors import *
+
 
 class Sensob:
 
@@ -58,17 +59,19 @@ class Cameraob(Sensob):
                 redCount += 1
         self.value = redCount / self.camob.get_size()
 
+
 # Object used to  measure distance in cm
 class Distanceob(Sensob):
     def __init__(self):
         self.distanceob = Ultrasonic()
         super().__init__([self.distanceob])
 
+
 # Object used to follow a black line
-class IRob(Sensob):
+class Reflectanceob(Sensob):
     def __init__(self):
-        self.IRob = IRProximitySensor()
-        super().__init__([self.IRob])
+        self.Reflectanceob = ReflectanceSensors()
+        super().__init__([self.Reflectanceob])
 
 
 

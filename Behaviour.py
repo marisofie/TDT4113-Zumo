@@ -1,6 +1,8 @@
 import random
+from Sensob import Reflectanceob
 
-class Behavior():
+
+class Behavior:
 
     def __init__(self, bbcon, sensobs, priority, active_flag):
         self.bbcon = bbcon  # Pointer to the bbcon object
@@ -105,6 +107,38 @@ class DriveAround(Behavior):
         self.match_degree = 0.1
 
 
+class FollowLines(Behavior):
+
+    def __init__(self, bbcon, sensobs=Reflectanceob(), priority=1, active_flag=True):
+        super().__init__(bbcon, sensobs=sensobs, priority=priority, active_flag=active_flag)
+        self.trigger_value = 0.2
+
+    # Deactivate if no black line is found
+    def consider_deactivation(self):
+        data = self.sensobs.get_sensor_value()
+        for value in data:
+            if value < self.trigger_value:
+                return False
+        self.active_flag = False
+        return True
+
+    # Activate if black line is found
+    def consider_activation(self):
+        data = self.sensobs.get_sensor_value()
+        for value in data:
+            if value < self.trigger_value:
+                self.active_flag = True
+                return True
+        return False
+
+    def sense_and_act(self):
+        data = self.sensobs.get_sensor_value()
+        if data[0] < self.trigger_value or data[1] < self.trigger_value:
+            self.motor_recommendations = ['L']
+        elif data[4] < self.trigger_value or data[5] < self.trigger_value:
+            self.motor_recommendations = ['R']
+        elif data[2] < self.trigger_value or data[3] < self.trigger_value:
+            self.motor_recommendations = ['F']
 
 
 
