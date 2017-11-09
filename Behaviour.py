@@ -1,3 +1,4 @@
+import timeit
 import random
 
 class Behavior():
@@ -52,6 +53,26 @@ class Behavior():
         if self.active_flag:
             self.sense_and_act()
             self.set_weight()
+
+
+# when the program has been running for 5 minutes, the robot stops.
+class RobotDone(Behavior):
+
+    def __init__(self, bbcon, priority=1, active_flag=True, sensobs=[]):
+        super().__init__(bbcon, priority, sensobs, active_flag)
+        self.stop_time = 30000
+
+    def consider_activation(self):
+        if self.bbcon.current_timestamp >= self.stop_time:
+            self.halt_request = True
+
+    def consider_deactivation(self):
+        if self.bbcon.current_timestamp < self.stop_time:
+            self.halt_request = False
+
+    def sense_and_act(self):
+        self.match_degree = 1
+        self.motor_recommendations = [('S', 0)]
 
 
 class StopRed(Behavior):
