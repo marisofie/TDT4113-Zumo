@@ -1,4 +1,4 @@
-from basic_robot.motors import Motors
+from motors import Motors
 
 # Interface between a behaviour and one or more Motobs
 

@@ -1,4 +1,3 @@
-import timeit
 import random
 from Sensob import Reflectanceob
 
