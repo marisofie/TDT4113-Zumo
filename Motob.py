@@ -1,6 +1,6 @@
 from motors import Motors
 
-# Interface between a behaviour and one or more Motobs
+# Interface between a behavior and one or more Motobs
 
 
 class Motob:

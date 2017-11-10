@@ -11,7 +11,7 @@ class BBCON:
         self.active_behaviors = active_behaviors
         for behavior in active_behaviors:
             if behavior not in behaviors:
-                self.add_behaviour(behavior)
+                self.add_behavior(behavior)
         self.sensobs = sensobs
         self.motob = Motob()
         self.arbitrator = Arbitrator(self)
@@ -20,8 +20,8 @@ class BBCON:
     def get_active_behaviors(self):
         return self.active_behaviors
 
-    # Adds a newly-created behavior to he list of behaviours
-    def add_behaviour(self, behavior):
+    # Adds a newly-created behavior to he list of behaviors
+    def add_behavior(self, behavior):
         if behavior not in self.behaviors:
             self.behaviors.append(behavior)
 
@@ -51,7 +51,7 @@ class BBCON:
 
     # Update all behaviors:
     # reading relevant sensob values and producing a motor recommendation
-    def update_all_behaviours(self):
+    def update_all_behaviors(self):
         for behavior in self.behaviors:
             behavior.update()
 
@@ -92,7 +92,7 @@ class BBCON:
 
     def run_one_timestep(self):
         self.update_all_sensobs()
-        self.update_all_behaviours()
+        self.update_all_behaviors()
         self.update_motob()
         self.wait()
         self.reset_sensob()

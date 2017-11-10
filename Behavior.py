@@ -34,7 +34,7 @@ class Behavior:
     def consider_deactivation(self):
         pass
 
-    # Test if the behaviour should be activated
+    # Test if the behavior should be activated
     def consider_activation(self):
         pass
 
@@ -92,7 +92,7 @@ class StopRed(Behavior):
             self.active_flag = True
 
     def consider_deactivation(self):
-        # if object is farther away than 10cm, deactivates behaviour
+        # if object is farther away than 10cm, deactivates behavior
         if self.sensobs[0].get_sensor_value() > self.stop_distance:
             self.active_flag = False
             self.motor_recommendations = []
@@ -122,7 +122,7 @@ class Stop(Behavior):
             print("Stop object active")
 
     def consider_deactivation(self):
-        # if object is farther away than 10cm, deactivates behaviour
+        # if object is farther away than 10cm, deactivates behavior
         print(self.sensobs)
         print(self.sensobs[0].get_sensor_value())
         if self.sensobs[0].get_sensor_value() > self.stop_distance:

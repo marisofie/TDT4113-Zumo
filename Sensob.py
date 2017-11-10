@@ -1,4 +1,4 @@
-# Interface between one or more sensors and the behaviours
+# Interface between one or more sensors and the behaviors
 
 from camera import *
 from reflectance_sensors import *
@@ -20,7 +20,7 @@ class Sensob:
         self.process_data(data)
 
     def process_data(self, data):
-        self.value = data
+        self.value = data[0]
 
     def get_sensor_value(self):
         return self.value
