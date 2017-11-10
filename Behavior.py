@@ -138,7 +138,7 @@ class Stop(Behavior):
 # makes the robot drive around until sensors get something.
 class DriveAround(Behavior):
 
-    def __init__(self, priority=1, active_flag=True, bbcon=None, sensobs=None):
+    def __init__(self, priority=0.5, active_flag=True, bbcon=None, sensobs=None):
         super().__init__(bbcon, sensobs=sensobs, priority=priority, active_flag=active_flag)
 
     def consider_deactivation(self):
