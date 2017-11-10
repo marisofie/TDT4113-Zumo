@@ -1,3 +1,4 @@
+import timeit
 import random
 from Sensob import Reflectanceob
 
@@ -56,35 +57,54 @@ class Behavior:
             self.set_weight()
 
 
+# when the program has been running for 5 minutes, the robot stops.
+class RobotDone(Behavior):
+
+    def __init__(self, bbcon, priority=1, active_flag=True, sensobs=[]):
+        super().__init__(bbcon, priority, sensobs, active_flag)
+        self.stop_time = 30000
+
+    def consider_activation(self):
+        if self.bbcon.current_timestamp >= self.stop_time:
+            self.halt_request = True
+
+    def consider_deactivation(self):
+        if self.bbcon.current_timestamp < self.stop_time:
+            self.halt_request = False
+
+    def sense_and_act(self):
+        self.match_degree = 1
+        self.motor_recommendations = [('S', 0)]
+
+
 class StopRed(Behavior):
 
     def __init__(self, priority=1, active_flag=True, bbcon=None, sensobs=[]):
         super().__init__(bbcon, sensobs=sensobs, priority=priority, active_flag=active_flag)
+        self.active_distance = 10
         self.stop_distance = 5
         self.min_red = 0.3
         self.motor_recommendations = []
 
     def consider_activation(self):
-        # if object is closer than 5cm
+        # if object is closer than 10cm
         # must remember that sensobs[0] contains distance
-        percent_red = self.sensobs[1].get_sensor_value()
-        if self.sensobs[0].value <= self.stop_distance and percent_red > self.min_red:
+        if self.sensobs[0].value <= self.active_distance:
             self.active_flag = True
 
     def consider_deactivation(self):
-        # if object is farther away than 5cm, deactivates behaviour
-        percent_red = self.sensobs[1].get_sensor_value()
-        if self.sensobs[0].get_sensor_value() > self.stop_distance or percent_red < self.min_red:
+        # if object is farther away than 10cm, deactivates behaviour
+        if self.sensobs[0].get_sensor_value() > self.stop_distance:
             self.active_flag = False
             self.motor_recommendations = []
 
     def sense_and_act(self):
         percent_red = self.sensobs[1].get_sensor_value()
-        if percent_red < self.min_red:
-            self.match_degree = 0
-        else:
+        if percent_red > self.min_red and self.sensobs[0].get_sensor_value() <= self.stop_distance:
             self.match_degree = percent_red
-        self.motor_recommendations = [('S', 0)]
+            self.motor_recommendations = [('S', 0)]
+        else:
+            self.match_degree = 0
 
 
 # makes the robot drive around until sensors get something.

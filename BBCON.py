@@ -1,4 +1,4 @@
-import time
+import timeit
 import sys
 from Motob import Motob
 from Arbitrator import Arbitrator
@@ -14,6 +14,7 @@ class BBCON:
         self.sensobs = sensobs
         self.motob = motob
         self.arbitrator = arbitrator
+        self.current_timestamp = timeit.default_timer()
 
     def get_active_behaviors(self):
         return self.active_behaviors
