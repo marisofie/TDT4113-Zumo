@@ -15,13 +15,11 @@ class Sensob:
         data = []
         for sensor in self.sensors:
             sensor.update()
-            self.data.append(sensor.get_value())
             data.append(sensor.get_value())
         self.process_data(data)
 
     def process_data(self, data):
-        pass
-        self.value = data[0]
+        self.value = data
 
     def get_sensor_value(self):
         return self.value
@@ -35,9 +33,8 @@ class Sensob:
 
 # Camera object used to detect the color red
 class Cameraob(Sensob):
+
     def __init__(self):
-        camob = Camera()
-        super().__init__([camob])
         self.camob = Camera()
         super().__init__([self.camob])
 
@@ -47,27 +44,26 @@ class Cameraob(Sensob):
 
     # Measures the percentage of pixels that are in the red spectrum
     def process_data(self, data):
-        pass
-        redCount = 0
+        red_count = 0
         img = data[0]
         for pixel in img:
-            tempCount = 0
+            temp_count = 0
             for i in range(3):
                 if self.lower[i] < pixel[i] < self.upper[i]:
-                    tempCount += 1
-            if tempCount == 3:
-                redCount += 1
-        self.value = redCount / self.camob.get_size()
+                    temp_count += 1
+            if temp_count == 3:
+                red_count += 1
+        self.value = red_count / self.camob.get_size()
 
 
-# Object used to  measure distance in cm
+# Object used to  measure distance in cm, data = [12]
 class Distanceob(Sensob):
     def __init__(self):
         self.distanceob = Ultrasonic()
         super().__init__([self.distanceob])
 
 
-# Object used to follow a black line
+# Object used to follow a black line, data = [[0.1, 0.1, 0.1, 0.1, 0.1, 0.1]]
 class Reflectanceob(Sensob):
     def __init__(self):
         self.Reflectanceob = ReflectanceSensors()

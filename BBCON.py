@@ -1,16 +1,18 @@
 import time
 import sys
+from Motob import Motob
+from Arbitrator import Arbitrator
 
 
 class BBCON:
-    def __init__(self, arbitrator, motobs, sensobs, behaviours, active_behaviors):
+    def __init__(self, sensobs, behaviours, active_behaviors, motob=Motob(), arbitrator=Arbitrator()):
         self.behaviors = behaviours
         self.active_behaviors = active_behaviors
         for behavior in active_behaviors:
             if behavior not in behaviours:
                 self.add_behaviour(behavior)
         self.sensobs = sensobs
-        self.motobs = motobs
+        self.motob = motob
         self.arbitrator = arbitrator
 
     def get_active_behaviors(self):
@@ -65,19 +67,15 @@ class BBCON:
 
     # Update motobs based on invoke_arbitrator()s motor recommendations
     # Motobs need to update settings of all motors
-    def update_motobs(self):
+    def update_motob(self):
         motor_recom, halt_req = self.invoke_arbitrator()
         if halt_req:
             self.halt()
         else:
-            k = 0
-            for motob in self.motobs:
-                motob.update_motor(motor_recom[k])
-                k += 1
+            self.motob.update_motor(motor_recom)
 
     def halt(self):
-        for motob in self.motobs:
-            motob.stop()
+        self.motob.stop()
         sys.exit()
 
     # Wait: allows the motor settings to remain active for a short period of time, e.g. one half second
@@ -93,8 +91,7 @@ class BBCON:
     def run_one_timestep(self):
         self.update_all_sensobs()
         self.update_all_behaviours()
-        self.arbitrator.choose_action_deterministic()
-        self.update_motobs()
+        self.update_motob()
         self.wait()
         self.reset_sensob()
 

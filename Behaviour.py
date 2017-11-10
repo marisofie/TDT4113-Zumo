@@ -30,21 +30,21 @@ class Behavior:
     def get_weight(self):
         return self.weight
 
+    # Test if the behavior should be deactiveted
     def consider_deactivation(self):
-        #Test if the behavior should be deactiveted
         pass
 
+    # Test if the behaviour should be activated
     def consider_activation(self):
-        #Test if the behaviour should be activated
         pass
 
+    # The core computations performed by the behavior that use sensob readings to produce
+    # motor recommendations (and halt requests).
+    # Must update motor recommendations.
     def sense_and_act(self):
-        #the core computations performed by the behavior that use sensob readings to produce
-        #motor recommendations (and halt requests).
-        #MUST UPDATE MOTORRECOMMENDATIONS
         pass
     
-    #Updates the behavior. The main call to the behavior. Returns the motor_reccomantations
+    # Updates the behavior. The main call to the behavior
     def update(self):
         if self.active_flag:
             self.consider_deactivation()
@@ -115,7 +115,7 @@ class FollowLines(Behavior):
 
     # Deactivate if no black line is found
     def consider_deactivation(self):
-        data = self.sensobs.get_sensor_value()
+        data = self.sensobs.get_sensor_value()[0]
         for value in data:
             if value < self.trigger_value:
                 return False
@@ -124,7 +124,7 @@ class FollowLines(Behavior):
 
     # Activate if black line is found
     def consider_activation(self):
-        data = self.sensobs.get_sensor_value()
+        data = self.sensobs.get_sensor_value()[0]
         for value in data:
             if value < self.trigger_value:
                 self.active_flag = True
@@ -132,7 +132,7 @@ class FollowLines(Behavior):
         return False
 
     def sense_and_act(self):
-        data = self.sensobs.get_sensor_value()
+        data = self.sensobs.get_sensor_value()[0]
         if data[0] < self.trigger_value or data[1] < self.trigger_value:
             self.motor_recommendations = ['L']
         elif data[4] < self.trigger_value or data[5] < self.trigger_value:
