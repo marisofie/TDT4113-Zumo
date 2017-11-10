@@ -1,8 +1,9 @@
 # Interface between one or more sensors and the behaviours
 
-from basic_robot.camera import *
-from basic_robot.ultrasonic import *
-from basic_robot.reflectance_sensors import *
+from camera import *
+from reflectance_sensors import *
+
+from ultrasonic import *
 
 
 class Sensob:

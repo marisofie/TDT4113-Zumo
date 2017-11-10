@@ -2,7 +2,7 @@ import os
 from PIL import Image
 
 
-class Camera():
+class Camera:
 
     def __init__(self, img_width=128, img_height=96, img_rot=0):
         self.value = None
