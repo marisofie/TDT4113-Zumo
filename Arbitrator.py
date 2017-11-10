@@ -12,13 +12,19 @@ class Arbitrator:
     # and a boolean indicating whether a run should be halted
     def choose_action_deterministic(self):
         active_behaviors = self.fetch_behaviors()
+        for behavior in active_behaviors:
+            print("Weights: ", behavior.weight)
         max_weight = 0
         chosen_behavior = None
 
         for behavior in active_behaviors:
-            weight = behavior.get_weight
+            weight = behavior.get_weight()
             if weight > max_weight:
                 max_weight = weight
                 chosen_behavior = behavior
+
+        print("Max weight: ", max_weight)
+        print("Chosen behavior: ", chosen_behavior)
+
 
         return chosen_behavior.get_motor_recommendations(), chosen_behavior.get_halt_request()

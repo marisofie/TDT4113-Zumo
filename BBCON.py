@@ -71,6 +71,8 @@ class BBCON:
     # Motobs need to update settings of all motors
     def update_motob(self):
         motor_recom, halt_req = self.invoke_arbitrator()
+        print(motor_recom)
+        print(halt_req)
         if halt_req:
             self.halt()
         else:
@@ -83,7 +85,7 @@ class BBCON:
     # Wait: allows the motor settings to remain active for a short period of time, e.g. one half second
     # producing activity in the robot, such as moving forward or turning
     def wait(self):
-        time.sleep(0.5)
+        time.sleep(1)
 
     # Resets all sensobs and/or associated sensors by calling the sensobs' own reset method
     def reset_sensob(self):

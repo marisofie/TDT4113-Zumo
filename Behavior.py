@@ -117,22 +117,23 @@ class Stop(Behavior):
     def consider_activation(self):
         # if object is closer than 10cm
         # must remember that sensobs[0] contains distance
+        print(self.sensobs[0].get_sensor_value())
         if self.sensobs[0].get_sensor_value() <= self.active_distance:
             self.active_flag = True
             print("Stop object active")
 
     def consider_deactivation(self):
         # if object is farther away than 10cm, deactivates behavior
-        print(self.sensobs)
         print(self.sensobs[0].get_sensor_value())
         if self.sensobs[0].get_sensor_value() > self.stop_distance:
-            self.active_flag = False
+            self.active_flag = True
             self.motor_recommendations = []
+            print("Stop object not active")
 
     def sense_and_act(self):
         if self.sensobs[0].get_sensor_value() <= self.stop_distance:
             self.match_degree = 0.5
-            self.motor_recommendations = [('S', 0)]
+            self.motor_recommendations = ['S', 0]
         else:
             self.match_degree = 0
 
@@ -150,10 +151,11 @@ class DriveAround(Behavior):
         self.active_flag = True
 
     def sense_and_act(self):
+        print("Driving")
         directions = ['R', 'L', 'F', 'B']
         direction = directions[random.randint(0, 3)]
-        speed = random.randint(0, 100)
-        self.motor_recommendations = [(direction, speed)]
+        speed = 30
+        self.motor_recommendations = [direction, speed]
         self.match_degree = 0.1
 
 
