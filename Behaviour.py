@@ -107,6 +107,35 @@ class StopRed(Behavior):
             self.match_degree = 0
 
 
+class Stop(Behavior):
+
+    def __init__(self, priority=1, active_flag=True, bbcon=None, sensobs=[]):
+        super().__init__(bbcon, sensobs=sensobs, priority=priority, active_flag=active_flag)
+        self.active_distance = 10
+        self.stop_distance = 5
+        self.motor_recommendations = []
+
+    def consider_activation(self):
+        # if object is closer than 10cm
+        # must remember that sensobs[0] contains distance
+        if self.sensobs[0].value <= self.active_distance:
+            self.active_flag = True
+            print("Stop object active")
+
+    def consider_deactivation(self):
+        # if object is farther away than 10cm, deactivates behaviour
+        if self.sensobs[0].get_sensor_value() > self.stop_distance:
+            self.active_flag = False
+            self.motor_recommendations = []
+
+    def sense_and_act(self):
+        if self.sensobs[0].get_sensor_value() <= self.stop_distance:
+            self.match_degree = 0.5
+            self.motor_recommendations = [('S', 0)]
+        else:
+            self.match_degree = 0
+
+
 # makes the robot drive around until sensors get something.
 class DriveAround(Behavior):
 
