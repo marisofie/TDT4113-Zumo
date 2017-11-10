@@ -4,8 +4,8 @@ from Sensob import Reflectanceob
 
 class Behavior:
 
-    def __init__(self, bbcon, sensobs, priority, active_flag):
-        self.bbcon = bbcon  # Pointer to the bbcon object
+    def __init__(self, sensobs, priority, active_flag):
+        #self.bbcon = bbcon  # Pointer to the bbcon object
         self.sensobs = sensobs  # A list of all the Sensobs
         self.active_flag = active_flag  # A boolean indicating if the behavior is active
         self.halt_request = False
@@ -59,8 +59,8 @@ class Behavior:
 # when the program has been running for 5 minutes, the robot stops.
 class RobotDone(Behavior):
 
-    def __init__(self, bbcon, priority=1, active_flag=True, sensobs=[]):
-        super().__init__(bbcon, priority, sensobs, active_flag)
+    def __init__(self, priority=1, active_flag=True, sensobs=[]):
+        super().__init__(priority, sensobs, active_flag)
         self.stop_time = 30000
 
     def consider_activation(self):
@@ -78,8 +78,8 @@ class RobotDone(Behavior):
 
 class StopRed(Behavior):
 
-    def __init__(self, priority=1, active_flag=True, bbcon=None, sensobs=[]):
-        super().__init__(bbcon, sensobs=sensobs, priority=priority, active_flag=active_flag)
+    def __init__(self, priority=1, active_flag=True, sensobs=[]):
+        super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.active_distance = 10
         self.stop_distance = 5
         self.min_red = 0.3
@@ -108,8 +108,8 @@ class StopRed(Behavior):
 
 class Stop(Behavior):
 
-    def __init__(self, priority=1, active_flag=True, bbcon=None, sensobs=[]):
-        super().__init__(bbcon, sensobs=sensobs, priority=priority, active_flag=active_flag)
+    def __init__(self, priority=1, active_flag=True, sensobs=[]):
+        super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.active_distance = 10
         self.stop_distance = 5
         self.motor_recommendations = []
@@ -117,12 +117,14 @@ class Stop(Behavior):
     def consider_activation(self):
         # if object is closer than 10cm
         # must remember that sensobs[0] contains distance
-        if self.sensobs[0].value <= self.active_distance:
+        if self.sensobs[0].get_sensor_value() <= self.active_distance:
             self.active_flag = True
             print("Stop object active")
 
     def consider_deactivation(self):
         # if object is farther away than 10cm, deactivates behaviour
+        print(self.sensobs)
+        print(self.sensobs[0].get_sensor_value())
         if self.sensobs[0].get_sensor_value() > self.stop_distance:
             self.active_flag = False
             self.motor_recommendations = []
@@ -138,8 +140,8 @@ class Stop(Behavior):
 # makes the robot drive around until sensors get something.
 class DriveAround(Behavior):
 
-    def __init__(self, priority=0.5, active_flag=True, bbcon=None, sensobs=None):
-        super().__init__(bbcon, sensobs=sensobs, priority=priority, active_flag=active_flag)
+    def __init__(self, priority=0.5, active_flag=True, sensobs=None):
+        super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
 
     def consider_deactivation(self):
         self.active_flag = True
@@ -157,8 +159,8 @@ class DriveAround(Behavior):
 
 class FollowLines(Behavior):
 
-    def __init__(self, bbcon, sensobs=Reflectanceob(), priority=1, active_flag=True):
-        super().__init__(bbcon, sensobs=sensobs, priority=priority, active_flag=active_flag)
+    def __init__(self, sensobs=Reflectanceob(), priority=1, active_flag=True):
+        super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.trigger_value = 0.2
 
     # Deactivate if no black line is found

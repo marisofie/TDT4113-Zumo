@@ -6,11 +6,11 @@ from Arbitrator import Arbitrator
 
 
 class BBCON:
-    def __init__(self, sensobs, behaviours, active_behaviors):
-        self.behaviors = behaviours
+    def __init__(self, sensobs, behaviors, active_behaviors):
+        self.behaviors = behaviors
         self.active_behaviors = active_behaviors
         for behavior in active_behaviors:
-            if behavior not in behaviours:
+            if behavior not in behaviors:
                 self.add_behaviour(behavior)
         self.sensobs = sensobs
         self.motob = Motob()
