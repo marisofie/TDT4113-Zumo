@@ -1,3 +1,4 @@
+import time
 import timeit
 import sys
 from Motob import Motob
@@ -5,15 +6,15 @@ from Arbitrator import Arbitrator
 
 
 class BBCON:
-    def __init__(self, sensobs, behaviours, active_behaviors, motob=Motob(), arbitrator=Arbitrator()):
+    def __init__(self, sensobs, behaviours, active_behaviors):
         self.behaviors = behaviours
         self.active_behaviors = active_behaviors
         for behavior in active_behaviors:
             if behavior not in behaviours:
                 self.add_behaviour(behavior)
         self.sensobs = sensobs
-        self.motob = motob
-        self.arbitrator = arbitrator
+        self.motob = Motob()
+        self.arbitrator = Arbitrator(self)
         self.current_timestamp = timeit.default_timer()
 
     def get_active_behaviors(self):
@@ -95,4 +96,5 @@ class BBCON:
         self.update_motob()
         self.wait()
         self.reset_sensob()
+
 
