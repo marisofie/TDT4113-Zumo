@@ -12,8 +12,6 @@ class Behavior:
         self.weight = 0
         self.match_degree = 0
         self.priority = priority  # A value indicating the priority of the behavior
-        for sensob in self.sensobs:
-            sensob.add_behavior(self)
 
     def get_halt_request(self):
         return self.halt_request
@@ -23,9 +21,6 @@ class Behavior:
 
     def get_active_flag(self):
         return self.active_flag
-
-    def get_sensobs(self):
-        return self.sensobs
 
     # Update the weight of the beahvior
     def set_weight(self):
@@ -196,6 +191,7 @@ class FollowLines(Behavior):
             self.motor_recommendations = ['R']
         elif data[2] < self.trigger_value or data[3] < self.trigger_value:
             self.motor_recommendations = ['F']
+<<<<<<< HEAD
             
             
 class FollowSide(Behavior):
@@ -222,6 +218,8 @@ class FollowSide(Behavior):
     
         
             
+=======
+>>>>>>> 0d19e7a4796c2f80f2257e65051bc3e1402ac1a1
 
 
 

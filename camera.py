@@ -10,8 +10,7 @@ class Camera:
         self.img_height = img_height
         self.img_rot = img_rot
 
-    def get_value(self):
-        return self.value
+    def get_value(self):  return self.value
 
     def get_size(self):
         return self.img_height * self.img_width
