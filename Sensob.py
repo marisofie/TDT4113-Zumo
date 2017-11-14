@@ -61,7 +61,6 @@ class Cameraob(Sensob):
         for x in range(image.xmax):
             for y in range(image.ymax):
                 pixel_list.append(image.get_pixel(x,y))
-        pixel_list = data.getdata()
         for pixel in pixel_list:
             temp_count = 0
             for i in range(3):
@@ -87,7 +86,7 @@ class Reflectanceob(Sensob):
         super().__init__([self.Reflectanceob])
         
         
-class IRProximityob(Sensob)
+class IRProximityob(Sensob):
     
     def __init__(self):
         self.IRProximityob = IRProximitySensor()
