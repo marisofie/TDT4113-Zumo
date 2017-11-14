@@ -4,6 +4,7 @@ from camera import *
 from reflectance_sensors import *
 from irproximity_sensor import *
 from ultrasonic import *
+from imager2 import Imager
 
 
 class Sensob:
@@ -52,8 +53,11 @@ class Cameraob(Sensob):
     # Measures the percentage of pixels that are in the red spectrum
     def process_data(self, data):
         red_count = 0
-        pixel_list = data.getdata()
-        print("Pixel_List: ", pixel_list)
+        image = Imager(image=data)
+        pixel_list = []
+        for x in range(image.xmax):
+            for y in range(image.ymax):
+                pixel_list.append(image.get_pixel(x, y))
         for pixel in pixel_list:
             temp_count = 0
             for i in range(3):
