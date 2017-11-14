@@ -4,6 +4,7 @@ from camera import *
 from reflectance_sensors import *
 from PIL import Image
 from imager2 import Imager
+from irproximity_sensor import *
 from ultrasonic import *
 
 
@@ -12,6 +13,13 @@ class Sensob:
     def __init__(self, sensors):
         self.sensors = sensors
         self.value = None
+        self.behaviors = []
+
+    def add_behavior(self, behavior):
+        self.behaviors.append(behavior)
+
+    def get_behaviors(self):
+        return self.behaviors
 
     def update(self):
         data = []
@@ -53,6 +61,7 @@ class Cameraob(Sensob):
         for x in range(image.xmax):
             for y in range(image.ymax):
                 pixel_list.append(image.get_pixel(x,y))
+        pixel_list = data.getdata()
         for pixel in pixel_list:
             temp_count = 0
             for i in range(3):
@@ -76,7 +85,15 @@ class Reflectanceob(Sensob):
     def __init__(self):
         self.Reflectanceob = ReflectanceSensors(True)
         super().__init__([self.Reflectanceob])
+        
+        
+class IRProximityob(Sensob)
+    
+    def __init__(self):
+        self.IRProximityob = IRProximitySensor()
+        super().__init__([self.IRProximityob])
 
+     
 
 
 
