@@ -59,7 +59,6 @@ class Cameraob(Sensob):
         for x in range(image.xmax):
             for y in range(image.ymax):
                 pixel_list.append(image.get_pixel(x, y))
-        print(pixel_list[len(pixel_list)//2])
         for pixel in pixel_list:
             temp_count = 0
             for i in range(3):
