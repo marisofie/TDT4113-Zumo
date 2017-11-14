@@ -52,12 +52,14 @@ class Cameraob(Sensob):
 
     # Measures the percentage of pixels that are in the red spectrum
     def process_data(self, data):
+        print("Datatype: ", data)
         red_count = 0
-        image = Imager(image=data)
+        image = Imager(image=data[0])
         pixel_list = []
         for x in range(image.xmax):
             for y in range(image.ymax):
                 pixel_list.append(image.get_pixel(x, y))
+        print(pixel_list[len(pixel_list)//2])
         for pixel in pixel_list:
             temp_count = 0
             for i in range(3):
@@ -86,3 +88,8 @@ class IRProximityob(Sensob):
     def __init__(self):
         self.IRProximityob = IRProximitySensor()
         super().__init__([self.IRProximityob])
+
+if __name__ == '__main__':
+    while True:
+        camSensob = Cameraob()
+        camSensob.update()

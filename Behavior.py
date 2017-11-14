@@ -81,19 +81,19 @@ class RobotDone(Behavior):
 class StopRed(Behavior):
     def __init__(self, priority=1, active_flag=True, sensobs=[]):
         super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
-        self.active_distance = 10
-        self.stop_distance = 5
+        self.active_distance = 50
+        self.stop_distance = 20
         self.min_red = 0.3
         self.motor_recommendations = []
 
     def consider_activation(self):
-        # if object is closer than 10cm
+        # if object is closer than stop discance in cm
         # must remember that sensobs[0] contains distance
-        if self.sensobs[0].value <= self.active_distance:
+        if self.sensobs[0].get_sensor_value() <= self.active_distance:
             self.active_flag = True
 
     def consider_deactivation(self):
-        # if object is farther away than 10cm, deactivates behavior
+        # if object is farther away than stop distance, deactivates behavior
         if self.sensobs[0].get_sensor_value() > self.stop_distance:
             self.active_flag = False
 
@@ -150,13 +150,21 @@ class DriveAround(Behavior):
 
     def sense_and_act(self):
         print("Driving")
-        directions = ['R', 'L', 'F', 'B']
+        self.motor_recommendations = ['F', 15]
+        self.count += 1
+        print("Count: ", self.count)
+        self.match_degree = 0.1
+
+'''
+    def sense_and_act(self):
+        print("Driving")
+        directions = ['R', 'L', 'F', 'S']
         direction = directions[random.randint(0, 3)]
         speed = 25
         self.motor_recommendations = [direction, speed]
         self.count += 1
         print("Count: ", self.count)
-        self.match_degree = 0.1
+        self.match_degree = 0.1'''
 
 
 class FollowLines(Behavior):

@@ -51,7 +51,7 @@ class BBCON:
                 if behavior.active_flag:
                     sensob_used = True
             if not sensob_used:
-                self.active_sensobs.pop(sensob)
+                self.active_sensobs.remove(sensob)
 
     # Update all sensobs:
     # querying the relevant sensors for their values
