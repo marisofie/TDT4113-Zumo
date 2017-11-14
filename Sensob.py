@@ -11,6 +11,13 @@ class Sensob:
     def __init__(self, sensors):
         self.sensors = sensors
         self.value = None
+        self.behaviors = []
+
+    def add_behavior(self, behavior):
+        self.behaviors.append(behavior)
+
+    def get_behaviors(self):
+        return self.behaviors
 
     def update(self):
         data = []
@@ -47,11 +54,12 @@ class Cameraob(Sensob):
     # Measures the percentage of pixels that are in the red spectrum
     def process_data(self, data):
         red_count = 0
-        img = data[0]
+        img = data
+        print("Image: ", img)
         for pixel in img:
             temp_count = 0
             for i in range(3):
-                if self.lower[i] < pixel[i] < self.upper[i]:
+                if self.lower[i] < pixel[i] and pixel[i] < self.upper[i]:
                     temp_count += 1
             if temp_count == 3:
                 red_count += 1

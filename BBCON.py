@@ -13,6 +13,7 @@ class BBCON:
             if behavior not in behaviors:
                 self.add_behavior(behavior)
         self.sensobs = sensobs
+        self.active_sensobs = []
         self.motob = Motob()
         self.arbitrator = Arbitrator(self)
         self.current_timestamp = timeit.default_timer()
@@ -36,17 +37,27 @@ class BBCON:
             raise Exception('The behavior must be in behaviors to be active')
         if behavior not in self.active_behaviors:
             self.active_behaviors.append(behavior)
+        for sensob in behavior.get_sensobs():
+            if sensob not in self.active_sensobs:
+                self.active_sensobs.append(sensob)
 
     # Removes existing behavior from active to inactive list of behaviors
     def deactivate_behavior(self, behavior):
         if behavior in self.active_behaviors:
             self.active_behaviors.remove(behavior)
+        for sensob in behavior.get_sensobs():
+            sensob_used = False
+            for behavior in sensob.get_behaviors():
+                if behavior.active_flag:
+                    sensob_used = True
+            if not sensob_used:
+                self.active_sensobs.pop(sensob)
 
     # Update all sensobs:
     # querying the relevant sensors for their values
     # pre-processing those values
     def update_all_sensobs(self):
-        for sensob in self.sensobs:
+        for sensob in self.active_sensobs:
             sensob.update()
 
     # Update all behaviors:

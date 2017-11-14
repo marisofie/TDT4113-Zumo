@@ -13,6 +13,8 @@ class Behavior:
         self.weight = 0
         self.match_degree = 0
         self.priority = priority  # A value indicating the priority of the behavior
+        for sensob in self.sensobs:
+            sensob.add_behavior(self)
 
     def get_halt_request(self):
         return self.halt_request
@@ -22,6 +24,9 @@ class Behavior:
 
     def get_active_flag(self):
         return self.active_flag
+
+    def get_sensobs(self):
+        return self.sensobs
 
     # Update the weight of the beahvior
     def set_weight(self):
