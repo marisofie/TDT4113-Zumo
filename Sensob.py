@@ -47,8 +47,9 @@ class Cameraob(Sensob):
     # Measures the percentage of pixels that are in the red spectrum
     def process_data(self, data):
         red_count = 0
-        img = data[0]
-        for pixel in img:
+        pixel_list = list(data.getdata())
+        print("Pixel_List: ", pixel_list)
+        for pixel in pixel_list:
             temp_count = 0
             for i in range(3):
                 if self.lower[i] < pixel[i] < self.upper[i]:
