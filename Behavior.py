@@ -1,9 +1,6 @@
-import random
-from Sensob import Reflectanceob
-
-
 class Behavior:
-    def __init__(self, sensobs, priority, active_flag):
+    def __init__(self, bbcon, sensobs, priority, active_flag):
+        self.bbcon = bbcon  # Pointer to BBCON-object
         self.sensobs = sensobs  # A list of all the Sensobs
         self.active_flag = active_flag  # A boolean indicating if the behavior is active
         self.halt_request = False
@@ -11,8 +8,6 @@ class Behavior:
         self.weight = 0
         self.match_degree = 0
         self.priority = priority  # A value indicating the priority of the behavior
-        for sensob in self.sensobs:
-            sensob.add_behavior(self)
 
     def get_halt_request(self):
         return self.halt_request
@@ -61,8 +56,8 @@ class Behavior:
 
 # when the program has been running for 5 minutes, the robot stops.
 class RobotDone(Behavior):
-    def __init__(self, priority=1, active_flag=True, sensobs=[]):
-        super().__init__(priority, sensobs, active_flag)
+    def __init__(self, bbcon, priority=1, active_flag=True, sensobs=[]):
+        super().__init__(bbcon=bbcon, priority=priority, sensobs=sensobs, active_flag=active_flag)
         self.stop_time = 30000
 
     def consider_activation(self):
@@ -79,8 +74,8 @@ class RobotDone(Behavior):
 
 
 class StopRed(Behavior):
-    def __init__(self, priority=1, active_flag=True, sensobs=[]):
-        super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
+    def __init__(self, bbcon, priority=1, active_flag=True, sensobs=[]):
+        super().__init__(bbcon=bbcon, sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.active_distance = 50
         self.stop_distance = 20
         self.min_red = 0.3
@@ -91,11 +86,13 @@ class StopRed(Behavior):
         # must remember that sensobs[0] contains distance
         if self.sensobs[0].get_sensor_value() <= self.active_distance:
             self.active_flag = True
+            self.bbcon.add_sensob(self.sensobs[1])
 
     def consider_deactivation(self):
         # if object is farther away than stop distance, deactivates behavior
         if self.sensobs[0].get_sensor_value() > self.stop_distance:
             self.active_flag = False
+            self.bbcon.remove_sensob(self.sensobs[1])
 
     def sense_and_act(self):
         percent_red = self.sensobs[1].get_sensor_value()
@@ -107,8 +104,8 @@ class StopRed(Behavior):
 
 
 class Stop(Behavior):
-    def __init__(self, priority=1, active_flag=True, sensobs=[]):
-        super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
+    def __init__(self, bbcon, priority=1, active_flag=True, sensobs=[]):
+        super().__init__(bbcon=bbcon, sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.active_distance = 10
         self.stop_distance = 5
         self.motor_recommendations = []
@@ -138,8 +135,8 @@ class Stop(Behavior):
 
 # makes the robot drive around until sensors get something.
 class DriveAround(Behavior):
-    def __init__(self, priority=0.5, active_flag=True, sensobs=[]):
-        super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
+    def __init__(self, bbcon, priority=0.5, active_flag=True, sensobs=[]):
+        super().__init__(bbcon=bbcon, sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.count = 0
 
     def consider_deactivation(self):
@@ -155,69 +152,27 @@ class DriveAround(Behavior):
         print("Count: ", self.count)
         self.match_degree = 0.1
 
-'''
-    def sense_and_act(self):
-        print("Driving")
-        directions = ['R', 'L', 'F', 'S']
-        direction = directions[random.randint(0, 3)]
-        speed = 25
-        self.motor_recommendations = [direction, speed]
-        self.count += 1
-        print("Count: ", self.count)
-        self.match_degree = 0.1'''
-
-
-class FollowLines(Behavior):
-    def __init__(self, sensobs, priority=1, active_flag=True):
-        super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
-        self.trigger_value = 0.2
-
-    # Deactivate if no black line is found
-    def consider_deactivation(self):
-        data = self.sensobs[0].get_sensor_value()
-        for value in data:
-            if value < self.trigger_value:
-                return False
-        self.active_flag = False
-        return True
-
-    # Activate if black line is found
-    def consider_activation(self):
-        data = self.sensobs[0].get_sensor_value()
-        for value in data:
-            if value < self.trigger_value:
-                self.active_flag = True
-                return True
-        return False
-
-    def sense_and_act(self):
-        data = self.sensobs[0].get_sensor_value()
-        if data[0] < self.trigger_value or data[1] < self.trigger_value:
-            self.motor_recommendations = ['L']
-        elif data[4] < self.trigger_value or data[5] < self.trigger_value:
-            self.motor_recommendations = ['R']
-        elif data[2] < self.trigger_value or data[3] < self.trigger_value:
-            self.motor_recommendations = ['F']
-
 
 class FollowSide(Behavior):
-    def __init__(self, sensobs=[], priority=0.8, active_flag=True):
-        super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
+    def __init__(self, bbcon, sensobs=[], priority=0.8, active_flag=True):
+        super().__init__(bbcon=bbcon, sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.motor_recommendations = []
 
     def consider_deactivation(self):
         self.active_flag = True
 
-    def consider_activation(self):
+    def consider_dactivation(self):
         self.active_flag = True
 
     def sense_and_act(self):
         data = self.sensobs[0].get_sensor_value()
+        print("Data1: ", data[0])
+        print("Data2: ", data[1])
         if data[0]:
             self.motor_recommendations = ['L', 35]
-            self.match_degree = 0.8
+            self.match_degree = 0.5
         elif data[1]:
-            self.motor_recommantions = ['R', 35]
-            self.match_degree = 0.8
+            self.motor_recommendations = ['R', 35]
+            self.match_degree = 0.5
         else:
             self.match_degree = 0
