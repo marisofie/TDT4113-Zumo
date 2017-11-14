@@ -71,7 +71,15 @@ class Reflectanceob(Sensob):
     def __init__(self):
         self.Reflectanceob = ReflectanceSensors(True)
         super().__init__([self.Reflectanceob])
+        
+        
+class IRProximityob(Sensob)
+    
+    def __init__(self):
+        self.IRProximityob = IRProximitySensor()
+        super().__init__([self.IRProximityob])
 
+     
 
 
 
