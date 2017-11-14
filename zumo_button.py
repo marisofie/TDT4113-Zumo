@@ -1,5 +1,6 @@
 __author__ = 'keithd'
-import wiringpi2 as wp
+import wiringpi as wp
+
 
 class ZumoButton():
 
