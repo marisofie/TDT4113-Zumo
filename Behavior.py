@@ -95,7 +95,6 @@ class StopRed(Behavior):
         # if object is farther away than 10cm, deactivates behavior
         if self.sensobs[0].get_sensor_value() > self.stop_distance:
             self.active_flag = False
-            self.motor_recommendations = []
 
     def sense_and_act(self):
         percent_red = self.sensobs[1].get_sensor_value()
@@ -127,7 +126,6 @@ class Stop(Behavior):
         print(self.sensobs[0].get_sensor_value())
         if self.sensobs[0].get_sensor_value() > self.stop_distance:
             self.active_flag = True
-            self.motor_recommendations = []
             print("Stop object not active")
 
     def sense_and_act(self):
@@ -143,6 +141,7 @@ class DriveAround(Behavior):
 
     def __init__(self, priority=0.5, active_flag=True, sensobs=None):
         super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
+        self.count = 0
 
     def consider_deactivation(self):
         self.active_flag = True
@@ -154,20 +153,22 @@ class DriveAround(Behavior):
         print("Driving")
         directions = ['R', 'L', 'F', 'B']
         direction = directions[random.randint(0, 3)]
-        speed = 30
+        speed = 25
         self.motor_recommendations = [direction, speed]
+        self.count += 1
+        print("Count: ", self.count)
         self.match_degree = 0.1
 
 
 class FollowLines(Behavior):
 
-    def __init__(self, sensobs=Reflectanceob(), priority=1, active_flag=True):
+    def __init__(self, sensobs, priority=1, active_flag=True):
         super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.trigger_value = 0.2
 
     # Deactivate if no black line is found
     def consider_deactivation(self):
-        data = self.sensobs.get_sensor_value()[0]
+        data = self.sensobs[0].get_sensor_value()
         for value in data:
             if value < self.trigger_value:
                 return False
@@ -176,7 +177,7 @@ class FollowLines(Behavior):
 
     # Activate if black line is found
     def consider_activation(self):
-        data = self.sensobs.get_sensor_value()[0]
+        data = self.sensobs[0].get_sensor_value()
         for value in data:
             if value < self.trigger_value:
                 self.active_flag = True
@@ -184,7 +185,7 @@ class FollowLines(Behavior):
         return False
 
     def sense_and_act(self):
-        data = self.sensobs.get_sensor_value()[0]
+        data = self.sensobs[0].get_sensor_value()
         if data[0] < self.trigger_value or data[1] < self.trigger_value:
             self.motor_recommendations = ['L']
         elif data[4] < self.trigger_value or data[5] < self.trigger_value:

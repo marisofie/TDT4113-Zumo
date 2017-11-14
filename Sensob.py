@@ -17,6 +17,7 @@ class Sensob:
         for sensor in self.sensors:
             sensor.update()
             data.append(sensor.get_value())
+        print("Data: ", data)
         self.process_data(data)
 
     def process_data(self, data):
@@ -66,8 +67,9 @@ class Distanceob(Sensob):
 
 # Object used to follow a black line, data = [[0.1, 0.1, 0.1, 0.1, 0.1, 0.1]]
 class Reflectanceob(Sensob):
+
     def __init__(self):
-        self.Reflectanceob = ReflectanceSensors()
+        self.Reflectanceob = ReflectanceSensors(True)
         super().__init__([self.Reflectanceob])
 
 

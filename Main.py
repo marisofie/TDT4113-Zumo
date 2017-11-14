@@ -5,15 +5,18 @@ from Sensob import *
 
 
 def main():
-    sensobs = [Distanceob()]
-    behavior_stop = Stop(sensobs=sensobs)
+    r_ob = Reflectanceob()
+    d_ob = Distanceob()
+    sensobs = [d_ob, r_ob]
+    behavior_follow_lines = FollowLines(sensobs=[r_ob])
     behavior_drive = DriveAround()
-    behaviors = [behavior_stop, behavior_drive]
+    behaviors = [behavior_drive, behavior_follow_lines]
     #button = ZumoButton()
 
-    bbcon = BBCON(sensobs=sensobs, behaviors=behaviors, active_behaviors=[behavior_drive, behavior_stop])
+    count = 0
 
+    bbcon = BBCON(sensobs=sensobs, behaviors=behaviors, active_behaviors=[behavior_drive, behavior_follow_lines])
     #button.wait_for_press()
-    while True:
-
+    while count < 50:
         bbcon.run_one_timestep()
+        count += 1

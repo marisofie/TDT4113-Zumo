@@ -55,6 +55,8 @@ class BBCON:
         for behavior in self.behaviors:
             behavior.update()
 
+        print("Active behaviors: ", self.active_behaviors)
+
         for behavior in self.behaviors:
             if behavior in self.active_behaviors and not behavior.active_flag:
                 self.deactivate_behavior(behavior)
@@ -96,7 +98,7 @@ class BBCON:
         self.update_all_sensobs()
         self.update_all_behaviors()
         self.update_motob()
-        self.wait()
+        #self.wait()
         self.reset_sensob()
 
 

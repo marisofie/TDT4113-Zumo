@@ -19,13 +19,13 @@ class Motob:
     def operationalize(self):
         recom = self.value
         if recom[0] == 'F':
-            self.motors.forward(speed=recom[1]*0.01, dur=30)    # multiply the degrees with 0.01 to get percent for speed
+            self.motors.forward(speed=recom[1]*0.01, dur=1)    # multiply the degrees with 0.01 to get percent for speed
         elif recom[0] == 'B':
-            self.motors.backward(speed=recom[1]*0.01, dur=30)
+            self.motors.backward(speed=recom[1]*0.01, dur=1)
         elif recom[0] == 'L':
-            self.motors.left(speed=recom[1]*0.01, dur=30)
+            self.motors.left(speed=recom[1]*0.01, dur=1)
         elif recom[0] == 'R':
-            self.motors.right(speed=recom[1]*0.01, dur=30)
+            self.motors.right(speed=recom[1]*0.01, dur=1)
         elif recom[0] == 'S':
             self.motors.stop()
 
