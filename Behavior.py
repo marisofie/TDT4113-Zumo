@@ -200,7 +200,7 @@ class FollowLines(Behavior):
             
             
 class FollowSide(Behavior):
-    def __init__(self, sensobs=[], priority=0.8, active_flag=true):
+    def __init__(self, sensobs=[], priority=0.8, active_flag=True):
         super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.motor_recommendations = []
         
