@@ -5,7 +5,6 @@ from Sensob import Reflectanceob
 class Behavior:
 
     def __init__(self, sensobs, priority, active_flag):
-        #self.bbcon = bbcon  # Pointer to the bbcon object
         self.sensobs = sensobs  # A list of all the Sensobs
         self.active_flag = active_flag  # A boolean indicating if the behavior is active
         self.halt_request = False
@@ -144,7 +143,7 @@ class Stop(Behavior):
 # makes the robot drive around until sensors get something.
 class DriveAround(Behavior):
 
-    def __init__(self, priority=0.5, active_flag=True, sensobs=None):
+    def __init__(self, priority=0.5, active_flag=True, sensobs=[]):
         super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.count = 0
 
@@ -200,7 +199,7 @@ class FollowLines(Behavior):
             
             
 class FollowSide(Behavior):
-    def __init__(self, sensobs=[], priority=0.8, active_flag=true):
+    def __init__(self, sensobs=[], priority=0.8, active_flag=True):
         super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.motor_recommendations = []
         
@@ -213,10 +212,10 @@ class FollowSide(Behavior):
     def sense_and_act(self):
         data = self.sensobs[0].get_sensor_value()
         if data[0]:
-            self.motor_recommendations = ['L']
+            self.motor_recommendations = ['L', 35]
             self.match_degree = 0.8
         elif data[1]:
-            self.motor_recommantions = ['R']
+            self.motor_recommantions = ['R', 35]
             self.match_degree = 0.8
         else:
             self.match_degree = 0

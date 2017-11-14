@@ -13,7 +13,7 @@ class BBCON:
             if behavior not in behaviors:
                 self.add_behavior(behavior)
         self.sensobs = sensobs
-        self.active_sensobs = []
+        self.active_sensobs = sensobs
         self.motob = Motob()
         self.arbitrator = Arbitrator(self)
         self.current_timestamp = timeit.default_timer()
