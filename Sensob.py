@@ -7,6 +7,13 @@ from imager2 import Imager
 from irproximity_sensor import *
 from ultrasonic import *
 
+<<<<<<< Updated upstream
+=======
+from basic_robot.camera import *
+from basic_robot.ultrasonic import *
+from basic_robot.reflectance_sensors import *
+
+>>>>>>> Stashed changes
 
 class Sensob:
 
@@ -55,6 +62,7 @@ class Cameraob(Sensob):
 
     # Measures the percentage of pixels that are in the red spectrum
     def process_data(self, data):
+<<<<<<< Updated upstream
         red_count = 0
         image = Imager(image=data)
         pixel_list = []
@@ -62,6 +70,12 @@ class Cameraob(Sensob):
             for y in range(image.ymax):
                 pixel_list.append(image.get_pixel(x,y))
         for pixel in pixel_list:
+=======
+        pass
+        red_count = 0
+        img = data[0]
+        for pixel in img:
+>>>>>>> Stashed changes
             temp_count = 0
             for i in range(3):
                 if self.lower[i] < pixel[i] < self.upper[i]:
@@ -69,6 +83,10 @@ class Cameraob(Sensob):
             if temp_count == 3:
                 red_count += 1
         self.value = red_count / self.camob.get_size()
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 
 # Object used to  measure distance in cm, data = [12]
@@ -78,6 +96,7 @@ class Distanceob(Sensob):
         super().__init__([self.distanceob])
 
 
+<<<<<<< Updated upstream
 # Object used to follow a black line, data = [[0.1, 0.1, 0.1, 0.1, 0.1, 0.1]]
 class Reflectanceob(Sensob):
 
@@ -100,3 +119,10 @@ class IRProximityob(Sensob):
 
 
 
+=======
+# Object used to follow a black line
+class Reflectanceob(Sensob):
+    def __init__(self):
+        self.Reflectanceob = ReflectanceSensors()
+        super().__init__([self.Reflectanceob])
+>>>>>>> Stashed changes
