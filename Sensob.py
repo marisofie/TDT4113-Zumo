@@ -11,13 +11,6 @@ class Sensob:
     def __init__(self, sensors):
         self.sensors = sensors
         self.value = None
-        self.behaviors = []
-
-    def add_behavior(self, behavior):
-        self.behaviors.append(behavior)
-
-    def get_behaviors(self):
-        return self.behaviors
 
     def update(self):
         data = []

@@ -6,14 +6,10 @@ from Arbitrator import Arbitrator
 
 
 class BBCON:
-    def __init__(self, sensobs, behaviors, active_behaviors):
-        self.behaviors = behaviors
-        self.active_behaviors = active_behaviors
-        for behavior in active_behaviors:
-            if behavior not in behaviors:
-                self.add_behavior(behavior)
-        self.sensobs = sensobs
-        self.active_sensobs = sensobs
+    def __init__(self):
+        self.behaviors = []
+        self.active_behaviors = []
+        self.sensobs = []
         self.motob = Motob()
         self.arbitrator = Arbitrator(self)
         self.current_timestamp = timeit.default_timer()
@@ -31,33 +27,28 @@ class BBCON:
         if sensob not in self.sensobs:
             self.sensobs.append(sensob)
 
+    # Removes sensob from list of sensobs
+    def remove_sensob(self, sensob):
+        if sensob in self.sensobs:
+            self.sensobs.remove(sensob)
+
     # Adds existing behvior to list of active behaviors
     def activate_behavior(self, behavior):
         if behavior not in self.behaviors:
             raise Exception('The behavior must be in behaviors to be active')
         if behavior not in self.active_behaviors:
             self.active_behaviors.append(behavior)
-        for sensob in behavior.get_sensobs():
-            if sensob not in self.active_sensobs:
-                self.active_sensobs.append(sensob)
 
     # Removes existing behavior from active to inactive list of behaviors
     def deactivate_behavior(self, behavior):
         if behavior in self.active_behaviors:
             self.active_behaviors.remove(behavior)
-        for sensob in behavior.get_sensobs():
-            sensob_used = False
-            for behavior in sensob.get_behaviors():
-                if behavior.active_flag:
-                    sensob_used = True
-            if not sensob_used:
-                self.active_sensobs.remove(sensob)
 
     # Update all sensobs:
     # querying the relevant sensors for their values
     # pre-processing those values
     def update_all_sensobs(self):
-        for sensob in self.active_sensobs:
+        for sensob in self.sensobs:
             sensob.update()
 
     # Update all behaviors:
