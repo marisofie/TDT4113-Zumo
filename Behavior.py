@@ -147,7 +147,7 @@ class DriveAround(Behavior):
 
     def sense_and_act(self):
         print("Driving")
-        self.motor_recommendations = ['F', 15]
+        self.motor_recommendations = ['F', 20]
         self.count += 1
         print("Count: ", self.count)
         self.match_degree = 0.1
@@ -168,11 +168,14 @@ class FollowSide(Behavior):
         data = self.sensobs[0].get_sensor_value()
         print("Data1: ", data[0])
         print("Data2: ", data[1])
-        if data[0]:
-            self.motor_recommendations = ['L', 35]
+        if data[0] and data[1]:
+            self.motor_recommendations = ['B', 30]
+            self.match_degree = 0.5
+        elif data[0]:
+            self.motor_recommendations = ['L', 30]
             self.match_degree = 0.5
         elif data[1]:
-            self.motor_recommendations = ['R', 35]
+            self.motor_recommendations = ['R', 30]
             self.match_degree = 0.5
         else:
             self.match_degree = 0
