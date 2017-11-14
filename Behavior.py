@@ -192,6 +192,32 @@ class FollowLines(Behavior):
             self.motor_recommendations = ['R']
         elif data[2] < self.trigger_value or data[3] < self.trigger_value:
             self.motor_recommendations = ['F']
+            
+            
+class FollowSide(Behavior):
+    def __init__(self, sensobs=[], priority=0.8, active_flag=true):
+        super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
+        self.motor_recommendations = []
+        
+    def consider_deactivation(self):
+        self.active_flag = True
+    
+    def consider_activation(self):
+        self.active_flag = True        
+    
+    def sense_and_act(self):
+        data = self.sensobs[0].get_sensor_value()
+        if data[0]:
+            self.motor_recommendations = ['L']
+            self.match_degree = 0.8
+        elif data[1]:
+            self.motor_recommantions = ['R']
+            self.match_degree = 0.8
+        else:
+            self.match_degree = 0
+    
+        
+            
 
 
 
