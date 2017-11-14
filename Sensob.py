@@ -2,21 +2,11 @@
 
 from camera import *
 from reflectance_sensors import *
-from PIL import Image
-from imager2 import Imager
 from irproximity_sensor import *
 from ultrasonic import *
 
-<<<<<<< Updated upstream
-=======
-from basic_robot.camera import *
-from basic_robot.ultrasonic import *
-from basic_robot.reflectance_sensors import *
-
->>>>>>> Stashed changes
 
 class Sensob:
-
     def __init__(self, sensors):
         self.sensors = sensors
         self.value = None
@@ -51,7 +41,6 @@ class Sensob:
 
 # Camera object used to detect the color red
 class Cameraob(Sensob):
-
     def __init__(self):
         self.camob = Camera()
         super().__init__([self.camob])
@@ -62,20 +51,10 @@ class Cameraob(Sensob):
 
     # Measures the percentage of pixels that are in the red spectrum
     def process_data(self, data):
-<<<<<<< Updated upstream
         red_count = 0
-        image = Imager(image=data)
-        pixel_list = []
-        for x in range(image.xmax):
-            for y in range(image.ymax):
-                pixel_list.append(image.get_pixel(x,y))
+        pixel_list = data.getdata()
+        print("Pixel_List: ", pixel_list)
         for pixel in pixel_list:
-=======
-        pass
-        red_count = 0
-        img = data[0]
-        for pixel in img:
->>>>>>> Stashed changes
             temp_count = 0
             for i in range(3):
                 if self.lower[i] < pixel[i] < self.upper[i]:
@@ -83,10 +62,6 @@ class Cameraob(Sensob):
             if temp_count == 3:
                 red_count += 1
         self.value = red_count / self.camob.get_size()
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
 
 
 # Object used to  measure distance in cm, data = [12]
@@ -96,33 +71,14 @@ class Distanceob(Sensob):
         super().__init__([self.distanceob])
 
 
-<<<<<<< Updated upstream
 # Object used to follow a black line, data = [[0.1, 0.1, 0.1, 0.1, 0.1, 0.1]]
 class Reflectanceob(Sensob):
-
     def __init__(self):
         self.Reflectanceob = ReflectanceSensors(True)
         super().__init__([self.Reflectanceob])
-        
-        
+
+
 class IRProximityob(Sensob):
-    
     def __init__(self):
         self.IRProximityob = IRProximitySensor()
         super().__init__([self.IRProximityob])
-
-     
-
-
-
-
-
-
-
-=======
-# Object used to follow a black line
-class Reflectanceob(Sensob):
-    def __init__(self):
-        self.Reflectanceob = ReflectanceSensors()
-        super().__init__([self.Reflectanceob])
->>>>>>> Stashed changes

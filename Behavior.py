@@ -3,7 +3,6 @@ from Sensob import Reflectanceob
 
 
 class Behavior:
-
     def __init__(self, sensobs, priority, active_flag):
         self.sensobs = sensobs  # A list of all the Sensobs
         self.active_flag = active_flag  # A boolean indicating if the behavior is active
@@ -12,6 +11,8 @@ class Behavior:
         self.weight = 0
         self.match_degree = 0
         self.priority = priority  # A value indicating the priority of the behavior
+        for sensob in self.sensobs:
+            sensob.add_behavior(self)
 
     def get_halt_request(self):
         return self.halt_request
@@ -21,6 +22,9 @@ class Behavior:
 
     def get_active_flag(self):
         return self.active_flag
+
+    def get_sensobs(self):
+        return self.sensobs
 
     # Update the weight of the beahvior
     def set_weight(self):
@@ -42,7 +46,7 @@ class Behavior:
     # Must update motor recommendations.
     def sense_and_act(self):
         pass
-    
+
     # Updates the behavior. The main call to the behavior
     def update(self):
         if self.active_flag:
@@ -57,7 +61,6 @@ class Behavior:
 
 # when the program has been running for 5 minutes, the robot stops.
 class RobotDone(Behavior):
-
     def __init__(self, priority=1, active_flag=True, sensobs=[]):
         super().__init__(priority, sensobs, active_flag)
         self.stop_time = 30000
@@ -76,7 +79,6 @@ class RobotDone(Behavior):
 
 
 class StopRed(Behavior):
-
     def __init__(self, priority=1, active_flag=True, sensobs=[]):
         super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.active_distance = 10
@@ -105,7 +107,6 @@ class StopRed(Behavior):
 
 
 class Stop(Behavior):
-
     def __init__(self, priority=1, active_flag=True, sensobs=[]):
         super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.active_distance = 10
@@ -137,7 +138,6 @@ class Stop(Behavior):
 
 # makes the robot drive around until sensors get something.
 class DriveAround(Behavior):
-
     def __init__(self, priority=0.5, active_flag=True, sensobs=[]):
         super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.count = 0
@@ -160,7 +160,6 @@ class DriveAround(Behavior):
 
 
 class FollowLines(Behavior):
-
     def __init__(self, sensobs, priority=1, active_flag=True):
         super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.trigger_value = 0.2
@@ -191,20 +190,19 @@ class FollowLines(Behavior):
             self.motor_recommendations = ['R']
         elif data[2] < self.trigger_value or data[3] < self.trigger_value:
             self.motor_recommendations = ['F']
-<<<<<<< HEAD
-            
-            
+
+
 class FollowSide(Behavior):
     def __init__(self, sensobs=[], priority=0.8, active_flag=True):
         super().__init__(sensobs=sensobs, priority=priority, active_flag=active_flag)
         self.motor_recommendations = []
-        
+
     def consider_deactivation(self):
         self.active_flag = True
-    
+
     def consider_activation(self):
-        self.active_flag = True        
-    
+        self.active_flag = True
+
     def sense_and_act(self):
         data = self.sensobs[0].get_sensor_value()
         if data[0]:
@@ -215,14 +213,3 @@ class FollowSide(Behavior):
             self.match_degree = 0.8
         else:
             self.match_degree = 0
-    
-        
-            
-=======
->>>>>>> 0d19e7a4796c2f80f2257e65051bc3e1402ac1a1
-
-
-
-
-
-
